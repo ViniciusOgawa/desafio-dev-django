@@ -1,3 +1,22 @@
-from django.shortcuts import render
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .models import Education
+from .serializers import EducationSerializer
+from .permissions import IsAdminOrOwner
 
-# Create your views here.
+
+class EducationListCreateAPIView(generics.ListCreateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    queryset = Education.objects.all()
+    serializer_class = EducationSerializer
+
+
+class EducationRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated, IsAdminOrOwner]
+
+    queryset = Education.objects.all()
+    serializer_class = EducationSerializer
