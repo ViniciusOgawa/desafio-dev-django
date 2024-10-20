@@ -6,4 +6,4 @@ class IsAdminOrOwner(permissions.BasePermission):
         if request.user.is_admin:
             return True
 
-        return obj == request.user
+        return obj.user == request.user
