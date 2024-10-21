@@ -7,13 +7,13 @@ from users.models import User
 
 @pytest.fixture
 def create_user(db):
-    def _create_user(username, email, password, date_of_birth="1990-01-01", is_admin=False):
+    def _create_user(username, email, password, date_of_birth="1990-01-01", is_superuser=False):
         return User.objects.create_user(
             username=username,
             email=email,
             password=password,
             date_of_birth=date_of_birth,
-            is_admin=is_admin
+            is_superuser=is_superuser
         )
     return _create_user
 
