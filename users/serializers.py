@@ -23,13 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'date_of_birth', 'is_admin', 'password']
-
-    def create(self, validated_data: dict) -> User:
-        if validated_data["is_admin"]:
-            return User.objects.create_superuser(**validated_data)
-
-        return User.objects.create_user(**validated_data)
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'date_of_birth', 'password', 'is_superuser']
 
     def update(self, instance: User, validated_data: dict) -> User:
         password = validated_data.pop("password", None)
@@ -42,3 +36,19 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+    def create(self, validated_data: dict) -> User:
+        password = validated_data.pop('password', None)
+        is_superuser = validated_data.pop('is_superuser', False)
+    
+        if is_superuser:
+            user = User.objects.create_superuser(**validated_data)
+        else:
+            user = User(**validated_data)
+    
+        if password:
+            user.set_password(password)
+        
+        user.save()
+
+        return user
