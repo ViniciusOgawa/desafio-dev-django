@@ -13,6 +13,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import UserContext from "../../providers/UserContext";
 import { registerSchema } from "./schema";
 import InputMask from "react-input-mask";
+import { Link as ChakraLink } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 
 const Register = () => {
   const { userRegister, loadingRegister } = useContext(UserContext);
@@ -223,6 +225,17 @@ const Register = () => {
               {loadingRegister ? "Cadastrando..." : "Cadastrar"}
             </Button>
           </form>
+          <Flex gap={"10px"}>
+            <Text fontSize={"md"}>Já possui conta?</Text>
+            <ChakraLink
+              as={RouterLink}
+              to="/login"
+              textDecoration="underline"
+              fontSize={"md"}
+            >
+              Entre
+            </ChakraLink>
+          </Flex>
         </Flex>
       </Flex>
     </Flex>
