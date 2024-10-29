@@ -14,11 +14,17 @@ export const UserProvider = ({ children }) => {
   const toast = useToast();
   const token = localStorage.getItem("@TOKEN");
   const [user, setUser] = useState([]);
+  const [userEducation, setUserEducation] = useState([]);
+  const [userRetriveEducation, setUserRetriveEducation] = useState([]);
   const [userContact, setUserContact] = useState([]);
   const [loadingAttUser, setLoadingAttUser] = useState(false);
   const [loadingRegister, setLoadingRegister] = useState(false);
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [loadingRegisterContact, setLoadingRegisterContact] = useState(false);
+  const [IsOpenModalEducation, setIsOpenModalEducation] = useState(false);
+  const [IsOpenModalAttEducation, setIsOpenModalAttEducation] = useState(false);
+  const [loadingRegisterEducation, setLoadingRegisterEducation] =
+    useState(false);
 
   const fetchUserData = async () => {
     try {
@@ -38,6 +44,17 @@ export const UserProvider = ({ children }) => {
         setUserContact(response.data);
       } catch (err) {
         console.error("Erro ao buscar dados de contato", err);
+      }
+
+      try {
+        const response = await api.get("/api/users/education/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserEducation(response.data);
+      } catch (err) {
+        console.error("Erro ao buscar dados de ensino", err);
       }
 
       if (location.pathname === "/login") {
@@ -231,9 +248,139 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const createEducation = async (formData) => {
+    try {
+      setLoadingRegisterEducation(true);
+      await api.post("/api/education/", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast({
+        title: "Ensino cadastrado com sucesso!",
+        position: "top-right",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate("/login");
+    } catch (error) {
+      toast({
+        title: "Erro ao efetuar cadastro de ensino!",
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.log(error);
+    } finally {
+      setLoadingRegisterEducation(false);
+    }
+  };
+
+  const updateEducation = async (id, educationData) => {
+    if (!id) {
+      toast({
+        title: "Erro ao atualizar ensino: ID não encontrado!",
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    for (const key in educationData) {
+      if (educationData[key] === "") {
+        delete educationData[key];
+      }
+    }
+
+    try {
+      const response = await api.patch(`/api/education/${id}/`, educationData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUserContact(response.data);
+
+      toast({
+        title: "Ensino atualizado com sucesso!",
+        position: "top-right",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao atualizar ensino!",
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.log(error);
+    }
+  };
+
+  const retriveEducation = async (id) => {
+    try {
+      const response = await api.get(`/api/education/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUserRetriveEducation(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteEducation = async (id) => {
+    try {
+      setLoadingRegisterEducation(true);
+      await api.delete(`/api/education/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast({
+        title: "Ensino deletado com sucesso!",
+        position: "top-right",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate("/login");
+    } catch (error) {
+      toast({
+        title: "Erro ao deletar cadastro de ensino!",
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.log(error);
+    } finally {
+      setLoadingRegisterEducation(false);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
+        deleteEducation,
+        userRetriveEducation,
+        setUserRetriveEducation,
+        retriveEducation,
+        updateEducation,
+        IsOpenModalAttEducation,
+        setIsOpenModalAttEducation,
+        createEducation,
+        loadingRegisterEducation,
+        IsOpenModalEducation,
+        setIsOpenModalEducation,
+        userEducation,
         fetchUserData,
         userContact,
         updateContact,
