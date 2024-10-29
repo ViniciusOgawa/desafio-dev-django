@@ -12,12 +12,44 @@ export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const toast = useToast();
+  const token = localStorage.getItem("@TOKEN");
   const [user, setUser] = useState([]);
+  const [userContact, setUserContact] = useState([]);
   const [loadingAttUser, setLoadingAttUser] = useState(false);
+  const [loadingRegister, setLoadingRegister] = useState(false);
+  const [loadingLogin, setLoadingLogin] = useState(false);
+  const [loadingRegisterContact, setLoadingRegisterContact] = useState(false);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await api.get("/api/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUser(response.data);
+
+      try {
+        const response = await api.get("/api/users/contacts/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserContact(response.data);
+      } catch (err) {
+        console.error("Erro ao buscar dados de contato", err);
+      }
+
+      if (location.pathname === "/login") {
+        navigate("/home");
+      }
+    } catch (err) {
+      window.localStorage.clear();
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
-    const token = localStorage.getItem("@TOKEN");
-
     if (!token) {
       window.localStorage.clear();
       if (location.pathname !== "/login" && location.pathname !== "/register") {
@@ -26,30 +58,10 @@ export const UserProvider = ({ children }) => {
       return;
     }
 
-    const fetchUserData = async () => {
-      try {
-        const response = await api.get("/api/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUser(response.data);
-
-        if (location.pathname === "/login") {
-          navigate("/home");
-        }
-      } catch (err) {
-        window.localStorage.clear();
-        navigate("/login");
-      }
-    };
-
     fetchUserData();
   }, [navigate, location]);
 
   const updateUser = async (userData) => {
-    const token = localStorage.getItem("@TOKEN");
-
     for (const key in userData) {
       if (userData[key] === "") {
         delete userData[key];
@@ -87,8 +99,6 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const [loadingLogin, setLoadingLogin] = useState(false);
-
   const userLogin = async (formData) => {
     try {
       setLoadingLogin(true);
@@ -117,8 +127,6 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const [loadingRegister, setLoadingRegister] = useState(false);
-
   const userRegister = async (formData) => {
     try {
       setLoadingRegister(true);
@@ -145,9 +153,92 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const createContact = async (formData) => {
+    try {
+      setLoadingRegisterContact(true);
+      await api.post("/api/contacts/", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast({
+        title: "Contato cadastrado com sucesso!",
+        position: "top-right",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate("/login");
+    } catch (error) {
+      toast({
+        title: "Erro ao efetuar cadastro de contato!",
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.log(error);
+    } finally {
+      setLoadingRegisterContact(false);
+    }
+  };
+
+  const updateContact = async (id, contactData) => {
+    if (!id) {
+      toast({
+        title: "Erro ao atualizar contato: ID não encontrado!",
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    for (const key in contactData) {
+      if (contactData[key] === "") {
+        delete contactData[key];
+      }
+    }
+
+    try {
+      setLoadingRegisterContact(true);
+      const response = await api.patch(`/api/contacts/${id}/`, contactData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUserContact(response.data);
+
+      toast({
+        title: "Contato atualizado com sucesso!",
+        position: "top-right",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao atualizar contato!",
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.log(error);
+    } finally {
+      setLoadingRegisterContact(false);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
+        fetchUserData,
+        userContact,
+        updateContact,
+        loadingRegisterContact,
+        createContact,
         userRegister,
         loadingRegister,
         loadingLogin,
