@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { Flex, Button } from "@chakra-ui/react";
 import { FormPerfil } from "../../components/formPerfil";
+import { FormContact } from "../../components/formContact";
 import UserContext from "../../providers/UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +20,7 @@ const Home = () => {
       case "perfil":
         return <FormPerfil />;
       case "contato":
-        return <Contato />;
+        return <FormContact />;
       case "educacao":
         return <Educacao />;
       case "experiencias":
