@@ -173,8 +173,8 @@ const ModalAttEducation = () => {
               </FormLabel>
               <Flex w={"100%"}>
                 <RadioGroup
-                  value={ongoingValue} // Monitorando o valor
-                  onChange={(value) => setValue("ongoing", value)} // Atualizando o valor
+                  value={ongoingValue}
+                  onChange={(value) => setValue("ongoing", value)}
                 >
                   <Radio value="true" marginRight={"30px"}>
                     Sim
