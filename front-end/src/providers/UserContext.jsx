@@ -15,7 +15,9 @@ export const UserProvider = ({ children }) => {
   const token = localStorage.getItem("@TOKEN");
   const [user, setUser] = useState([]);
   const [userEducation, setUserEducation] = useState([]);
+  const [userExperience, setUserExperience] = useState([]);
   const [userRetriveEducation, setUserRetriveEducation] = useState([]);
+  const [userRetriveExperience, setUserRetriveExperience] = useState([]);
   const [userContact, setUserContact] = useState([]);
   const [loadingAttUser, setLoadingAttUser] = useState(false);
   const [loadingRegister, setLoadingRegister] = useState(false);
@@ -24,6 +26,9 @@ export const UserProvider = ({ children }) => {
   const [IsOpenModalEducation, setIsOpenModalEducation] = useState(false);
   const [IsOpenModalAttEducation, setIsOpenModalAttEducation] = useState(false);
   const [loadingRegisterEducation, setLoadingRegisterEducation] =
+    useState(false);
+  const [IsOpenModalExperience, setIsOpenModalExperience] = useState(false);
+  const [IsOpenModalAttExperience, setIsOpenModalAttExperience] =
     useState(false);
 
   const fetchUserData = async () => {
@@ -55,6 +60,17 @@ export const UserProvider = ({ children }) => {
         setUserEducation(response.data);
       } catch (err) {
         console.error("Erro ao buscar dados de ensino", err);
+      }
+
+      try {
+        const response = await api.get("/api/users/experience/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserExperience(response.data);
+      } catch (err) {
+        console.error("Erro ao buscar dados de experiencia", err);
       }
 
       if (location.pathname === "/login") {
@@ -366,9 +382,136 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const createExperience = async (formData) => {
+    try {
+      await api.post("/api/experience/", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast({
+        title: "Experiência cadastrada com sucesso!",
+        position: "top-right",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate("/login");
+    } catch (error) {
+      toast({
+        title: "Erro ao efetuar cadastro de experiência!",
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.log(error);
+    }
+  };
+
+  const updateExperience = async (id, experienceData) => {
+    if (!id) {
+      toast({
+        title: "Erro ao atualizar experiência: ID não encontrado!",
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    for (const key in experienceData) {
+      if (experienceData[key] === "") {
+        delete experienceData[key];
+      }
+    }
+
+    try {
+      const response = await api.patch(
+        `/api/experience/${id}/`,
+        experienceData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUserExperience(response.data);
+
+      toast({
+        title: "Experiência atualizada com sucesso!",
+        position: "top-right",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao atualizar experiência!",
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.log(error);
+    }
+  };
+
+  const retriveExperience = async (id) => {
+    try {
+      const response = await api.get(`/api/experience/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUserRetriveExperience(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteExperience = async (id) => {
+    try {
+      await api.delete(`/api/experience/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast({
+        title: "Experiência deletada com sucesso!",
+        position: "top-right",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate("/login");
+    } catch (error) {
+      toast({
+        title: "Erro ao deletar cadastro de experiência!",
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.log(error);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
+        IsOpenModalExperience,
+        setIsOpenModalExperience,
+        IsOpenModalAttExperience,
+        setIsOpenModalAttExperience,
+        userRetriveExperience,
+        deleteExperience,
+        retriveExperience,
+        updateExperience,
+        createExperience,
+        userExperience,
+        setUserExperience,
         deleteEducation,
         userRetriveEducation,
         setUserRetriveEducation,
