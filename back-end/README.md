@@ -9,7 +9,7 @@ Antes de começar, você precisa ter os seguintes softwares instalados na sua m�
 
 ## Configuração do Projeto
 
-1. Após clonar o repositório, copie o arquivo `.env.example` e complete as seguintes variáveis de ambiente com seus dados:
+1. Após clonar o repositório, certifique-se de configurar as variáveis de ambiente necessárias. Um arquivo `.env.example` está disponível na raiz do projeto. Renomeie-o para `.env` e ajuste as variáveis conforme necessário:
 
     ```env
     ALLOWED_HOSTS=hosts/domínios
