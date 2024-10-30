@@ -96,4 +96,143 @@ Para garantir que sua aplicação está funcionando corretamente, você pode rod
 - **Django REST Framework SimpleJWT**: Ferramenta para autenticação via JSON Web Tokens (JWT).
 - **pytest**: Ferramenta de testes para Python.
 
+## Especificações das Rotas da API
 
+### Rotas de Autenticação
+
+- **Login**
+  - **POST** `/api/login/`
+    - Descrição: Autenticação de usuários com credenciais (usuário e senha).
+    - Corpo da requisição:
+      ```json
+      {
+        "username": "normaluser",
+        "password": "12345"
+      }
+      ```
+
+### Rotas de Usuários
+
+- **Listar usuários**
+  - **GET** `/api/users/`
+    - Descrição: Retorna uma lista de todos os usuários.
+
+- **Criar usuário**
+  - **POST** `/api/users/`
+    - Descrição: Cria um novo usuário.
+    - Corpo da requisição:
+      ```json
+      {
+        "username": "normaluser",
+        "first_name": "normal",
+        "last_name": "user",
+        "email": "normaluser@mail.com",
+        "date_of_birth": "12/12/2012",
+        "password": "12345",
+        "is_superuser": false
+      }
+      ```
+
+- **Atualizar usuário**
+  - **PATCH** `/api/users/{id}/`
+    - Descrição: Atualiza informações de um usuário.
+    - Corpo da requisição:
+      ```json
+      {
+        "username": "normaluser",
+        "first_name": "normal",
+        "last_name": "user",
+        "email": "normaluser@mail.com",
+        "date_of_birth": "12/12/2012",
+        "password": "12345",
+        "is_superuser": false
+      }
+      ```
+
+- **Deletar usuário**
+  - **DELETE** `/api/users/{id}/`
+    - Descrição: Remove um usuário específico.
+
+### Rotas de Contatos
+
+- **Listar contatos**
+  - **GET** `/api/contacts/`
+    - Descrição: Retorna uma lista de todos os contatos.
+
+- **Criar contato**
+  - **POST** `/api/contacts/`
+    - Descrição: Cria um novo contato.
+    - Corpo da requisição:
+      ```json
+      {
+        "phone_number": "(43)99154-3421",
+        "city": "São Paulo",
+        "state": "São Paulo",
+        "street": "Avenida Paulista",
+        "number": "123",
+        "neighborhood": "Bela Vista",
+        "postal_code": "01311-000"
+      }
+      ```
+
+- **Atualizar contato**
+  - **PATCH** `/api/contacts/{id}/`
+    - Descrição: Atualiza informações de um contato.
+
+- **Deletar contato**
+  - **DELETE** `/api/contacts/{id}/`
+    - Descrição: Remove um contato específico.
+
+### Rotas de Experiências
+
+- **Listar experiências**
+  - **GET** `/api/experience/`
+    - Descrição: Retorna uma lista de todas as experiências.
+
+- **Criar experiência**
+  - **POST** `/api/experience/`
+    - Descrição: Cria uma nova experiência.
+    - Corpo da requisição:
+      ```json
+      {
+        "role": "Software Engineer",
+        "company": "Tech Solutions Ltd.",
+        "period": "Jan 2020 - Present",
+        "description": "Responsible for designing, developing, and maintaining web applications."
+      }
+      ```
+
+- **Atualizar experiência**
+  - **PATCH** `/api/experience/{id}/`
+    - Descrição: Atualiza informações de uma experiência.
+
+- **Deletar experiência**
+  - **DELETE** `/api/experience/{id}/`
+    - Descrição: Remove uma experiência específica.
+
+### Rotas de Educação
+
+- **Listar educação**
+  - **GET** `/api/education/`
+    - Descrição: Retorna uma lista de todas as informações de educação.
+
+- **Criar educação**
+  - **POST** `/api/education/`
+    - Descrição: Cria uma nova entrada de educação.
+    - Corpo da requisição:
+      ```json
+      {
+        "institution": "Harvard University",
+        "course": "Computer Science",
+        "ongoing": true,
+        "period": "3"
+      }
+      ```
+
+- **Atualizar educação**
+  - **PATCH** `/api/education/{id}/`
+    - Descrição: Atualiza informações de uma educação específica.
+
+- **Deletar educação**
+  - **DELETE** `/api/education/{id}/`
+    - Descrição: Remove uma entrada de educação específica.
