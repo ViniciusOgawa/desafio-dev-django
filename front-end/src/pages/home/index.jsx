@@ -3,15 +3,9 @@ import { Flex, Button } from "@chakra-ui/react";
 import { FormPerfil } from "../../components/formPerfil";
 import { FormContact } from "../../components/formContact";
 import { ContainerEducation } from "../../components/containerEducation";
+import { ContainerExperience } from "../../components/containerExperience";
 import UserContext from "../../providers/UserContext";
 import { useNavigate } from "react-router-dom";
-
-const Educacao = () => (
-  <div>Ainda nao foi adicionado nenhum tipo de ensino !</div>
-);
-const Experiencias = () => (
-  <div>Ainda nao foi adicionado nenhum tipo de experiencia !</div>
-);
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("perfil");
@@ -27,7 +21,7 @@ const Home = () => {
       case "educacao":
         return <ContainerEducation />;
       case "experiencias":
-        return <Experiencias />;
+        return <ContainerExperience />;
       default:
         return <FormPerfil />;
     }
