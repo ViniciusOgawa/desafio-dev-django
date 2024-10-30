@@ -30,7 +30,6 @@ const Register = () => {
   });
 
   const submit = (data) => {
-    console.log("Dados enviados:", data);
     userRegister(data);
     reset();
   };
