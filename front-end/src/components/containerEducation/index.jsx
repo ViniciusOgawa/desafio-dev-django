@@ -7,6 +7,8 @@ import { ModalAttEducation } from "../modalAttEducation";
 
 const ContainerEducation = () => {
   const { setIsOpenModalEducation, userEducation } = useContext(UserContext);
+
+  const educationExists = userEducation.length > 0;
   return (
     <Flex
       h={"100%"}
@@ -18,7 +20,7 @@ const ContainerEducation = () => {
     >
       <ModalCreateEducation />
       <ModalAttEducation />
-      {userEducation ? (
+      {educationExists ? (
         <UnorderedList
           styleType="none"
           margin={"20px"}
@@ -35,7 +37,7 @@ const ContainerEducation = () => {
         </UnorderedList>
       ) : (
         <Text fontWeight={"bold"} margin={"20px"}>
-          Ainda não foi adicionado nenhum tipo de ensino !
+          Ainda não foi adicionado nenhum tipo de ensino
         </Text>
       )}
       <Button
