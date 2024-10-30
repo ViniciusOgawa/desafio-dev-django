@@ -9,14 +9,7 @@ Antes de começar, você precisa ter os seguintes softwares instalados na sua m�
 
 ## Configuração do Projeto
 
-1. Clone o repositório para a sua máquina local:
-
-    ```bash
-    git clone https://github.com/seu-usuario/seu-repositorio.git
-    cd seu-repositorio
-    ```
-
-2. Copie o arquivo `.env.example` e complete as seguintes variáveis de ambiente com seus dados:
+1. Após clonar o reposi;otio, copie o arquivo `.env.example` e complete as seguintes variáveis de ambiente com seus dados:
 
     ```env
     ALLOWED_HOSTS=hosts/domínios
