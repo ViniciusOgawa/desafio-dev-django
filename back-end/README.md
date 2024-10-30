@@ -9,7 +9,7 @@ Antes de começar, você precisa ter os seguintes softwares instalados na sua m�
 
 ## Configuração do Projeto
 
-1. Após clonar o reposi;otio, copie o arquivo `.env.example` e complete as seguintes variáveis de ambiente com seus dados:
+1. Após clonar o repositório, copie o arquivo `.env.example` e complete as seguintes variáveis de ambiente com seus dados:
 
     ```env
     ALLOWED_HOSTS=hosts/domínios
